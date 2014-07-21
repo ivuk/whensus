@@ -80,11 +80,17 @@ def GetDuration(PmSuspendFile):
     SuspendTime = GetTime('suspend', PmSuspendFile)
     ResumeTime = GetTime('resume', PmSuspendFile)
 
-    for (a, b) in zip(SuspendTime, ResumeTime):
+    for index, (a, b) in enumerate(zip(SuspendTime, ResumeTime)):
         elema = mktime(strptime(a, DateFormat))
         elemb = mktime(strptime(b, DateFormat))
         elemc = timedelta(seconds=elemb - elema)
         Duration.append(elemc)
+        """Reformat the dates so they match those we use for battery
+        information display"""
+        SuspendTime[index] = datetime.fromtimestamp(int(elema)).strftime(
+            '%d.%m.%Y %H:%M:%S')
+        ResumeTime[index] = datetime.fromtimestamp(int(elemb)).strftime(
+            '%d.%m.%Y %H:%M:%S')
 
     return(Duration, SuspendTime, ResumeTime)
 
