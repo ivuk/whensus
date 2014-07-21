@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 
-from time import strptime, mktime
-from datetime import timedelta
 import argparse
+from datetime import timedelta, datetime
+from glob import glob
+from time import strptime, mktime
 
 
 def OpenFile(InputFile):
@@ -34,6 +35,36 @@ def GetTime(TimeType, PmSuspendFile):
                 Time.append(line[:DateFieldLength])
 
     return(Time)
+
+
+def GetBatteryData(BatteryChargeFile):
+    ChargeFile = OpenFile(BatteryChargeFile)
+    TimeBatteryCharge = list()
+
+    for line in ChargeFile:
+        a, b, c = line.split()
+        a = datetime.fromtimestamp(int(a)).strftime('%d.%m.%Y %H:%M:%S')
+        TimeBatteryCharge.append([a, b, c])
+
+    return(TimeBatteryCharge)
+
+
+def PrintBatteryConsole(BatteryChargeFile):
+    ChargeInfo = GetBatteryData(BatteryChargeFile)
+
+    Time = list()
+    Battery = list()
+    State = list()
+    for elem in ChargeInfo:
+        Time.append(elem[0])
+        Battery.append(elem[1])
+        State.append(elem[2])
+
+    print('{0:5}\t{1:25}\t{2:10}\t{3:20}'.format('Index', 'Time',
+                                                 'Percentage', 'State'))
+    if len(Time) == len(Battery) and len(Time) == len(State):
+        for index, (a, b, c) in enumerate(zip(Time, Battery, State)):
+            print('{0:5}\t{1:25}\t{2:10}\t{3:20}'.format(index, a, b, c))
 
 
 def GetDuration(PmSuspendFile):
@@ -79,6 +110,9 @@ def DoIt():
     """
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('-b', '--battery', dest='Battery', help='Show the '
+                        'battery charging/discharging information',
+                        action='store_true')
     parser.add_argument('-d', '--date', dest='DateFormat', help='Specify '
                         'the date format', default='%a %b %d %H:%M:%S %Z %Y',
                         type=str, action='store')
@@ -109,6 +143,15 @@ def DoIt():
 
     if args.Output == 'console' and args.PmSuspendFile:
         PrintConsole(args.PmSuspendFile)
+
+    if args.Battery:
+        try:
+            BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
+        except IOError as e:
+            print("Got IOError, '{0}: {1}'".format(e.errno, e.strerror))
+        else:
+            PrintBatteryConsole(BatteryInfoFile[0])
+
 
 if __name__ == "__main__":
     DoIt()
