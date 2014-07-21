@@ -65,11 +65,11 @@ def PrintBatteryConsole(BatteryChargeFile):
         Battery.append(elem[1])
         State.append(elem[2])
 
-    print('{0:5}\t{1:25}\t{2:10}\t{3:20}'.format('Index', 'Time',
+    print('{0:5}\t{1:20}\t{2:10}\t{3:20}'.format('Index', 'Time',
                                                  'Percentage', 'State'))
     if len(Time) == len(Battery) and len(Time) == len(State):
         for index, (a, b, c) in enumerate(zip(Time, Battery, State)):
-            print('{0:5}\t{1:25}\t{2:10}\t{3:20}'.format(index, a, b, c))
+            print('{0:5}\t{1:20}\t{2:10}\t{3:20}'.format(index, a, b, c))
 
 
 def GetDuration(PmSuspendFile):
@@ -101,12 +101,12 @@ def PrintConsole(PmSuspendFile):
 
     if len(SuspendTime) == len(ResumeTime):
 
-        print('{0:5}\t{1:30}\t{2:30}\t{3:10}'.format('Index', 'Suspend time',
+        print('{0:5}\t{1:20}\t{2:20}\t{3:10}'.format('Index', 'Suspend time',
               'Resume time', 'Duration'))
 
         for index, (suspend, resume, duration) in enumerate(
                 zip(SuspendTime, ResumeTime, SuspendDuration)):
-            print('{0:5}\t{1:30}\t{2:30}\t{3:10}'.format(index, suspend,
+            print('{0:5}\t{1:20}\t{2:20}\t{3:10}'.format(index, suspend,
                                                          resume,
                                                          str(duration)))
     else:
