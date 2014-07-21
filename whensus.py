@@ -54,6 +54,7 @@ def GetBatteryData(BatteryChargeFile):
 
 
 def PrintBatteryConsole(BatteryChargeFile):
+    """Print out the gathered battery charging/discharging information"""
     ChargeInfo = GetBatteryData(BatteryChargeFile)
     Time = list()
     Battery = list()
