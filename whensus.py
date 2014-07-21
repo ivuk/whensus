@@ -51,10 +51,10 @@ def GetBatteryData(BatteryChargeFile):
 
 def PrintBatteryConsole(BatteryChargeFile):
     ChargeInfo = GetBatteryData(BatteryChargeFile)
-
     Time = list()
     Battery = list()
     State = list()
+
     for elem in ChargeInfo:
         Time.append(elem[0])
         Battery.append(elem[1])
