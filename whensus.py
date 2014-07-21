@@ -38,6 +38,10 @@ def GetTime(TimeType, PmSuspendFile):
 
 
 def GetBatteryData(BatteryChargeFile):
+    """Read the available battery charging/discharging data from the system,
+    this relies on the file format by upowerd, located in
+    /var/lib/upower/history-charge*.dat file
+    """
     ChargeFile = OpenFile(BatteryChargeFile)
     TimeBatteryCharge = list()
 
