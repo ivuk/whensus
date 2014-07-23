@@ -4,6 +4,7 @@
 import argparse
 from datetime import timedelta, datetime
 from glob import glob
+from matplotlib import pyplot
 from time import strptime, mktime
 
 
@@ -113,6 +114,26 @@ def PrintConsole(PmSuspendFile):
         print("The length of SuspendTime and ResumeTime lists differs!")
 
 
+def DrawBatteryGraph(BatteryChargeFile):
+    """Draw a battery graph using matplotlib"""
+    ChargeInfo = GetBatteryData(BatteryChargeFile)
+    Time = list()
+    Battery = list()
+    State = list()
+
+    for elem in ChargeInfo:
+        Time.append(elem[0])
+        Battery.append(elem[1])
+        State.append(elem[2])
+
+    x = list()
+    for elem in Time:
+        x.append(datetime.strptime(elem, '%d.%m.%Y %H:%M:%S'))
+
+    pyplot.plot(x, Battery)
+    pyplot.show()
+
+
 def DoIt():
     """
     Set up the available program options
@@ -161,7 +182,10 @@ def DoIt():
         except IOError as e:
             print("Got IOError, '{0}: {1}'".format(e.errno, e.strerror))
         else:
-            PrintBatteryConsole(BatteryInfoFile[0])
+            if args.Output == 'console':
+                PrintBatteryConsole(BatteryInfoFile[0])
+            elif args.Output == 'graph':
+                DrawBatteryGraph(BatteryInfoFile[0])
 
 
 if __name__ == "__main__":
