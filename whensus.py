@@ -119,18 +119,12 @@ def DrawBatteryGraph(BatteryChargeFile):
     ChargeInfo = GetBatteryData(BatteryChargeFile)
     Time = list()
     Battery = list()
-    State = list()
 
     for elem in ChargeInfo:
-        Time.append(elem[0])
+        Time.append(datetime.strptime(elem[0], '%d.%m.%Y %H:%M:%S'))
         Battery.append(elem[1])
-        State.append(elem[2])
 
-    x = list()
-    for elem in Time:
-        x.append(datetime.strptime(elem, '%d.%m.%Y %H:%M:%S'))
-
-    pyplot.plot(x, Battery)
+    pyplot.plot(Time, Battery)
     pyplot.show()
 
 
