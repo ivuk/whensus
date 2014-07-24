@@ -114,6 +114,26 @@ def PrintConsole(PmSuspendFile):
         print("The length of SuspendTime and ResumeTime lists differs!")
 
 
+def DrawGraph(PmSuspendFile):
+    """Draw a suspend graph using matplotlib"""
+    SuspendDuration, SuspendTime, ResumeTime = GetDuration(PmSuspendFile)
+    NewDuration = list()
+    NewSuspendTime = list()
+
+    for (elema, elemb, elemc) in zip(SuspendDuration, SuspendTime, ResumeTime):
+        """y is NewDuration, x is NewSuspendTime
+        insert the values for y twice in a row in order to get the same data
+        points for suspend and resume x point
+        """
+        NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
+        NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
+        NewSuspendTime.append(datetime.strptime(elemb, '%d.%m.%Y %H:%M:%S'))
+        NewSuspendTime.append(datetime.strptime(elemc, '%d.%m.%Y %H:%M:%S'))
+
+    pyplot.plot(NewSuspendTime, NewDuration)
+    pyplot.show()
+
+
 def DrawBatteryGraph(BatteryChargeFile):
     """Draw a battery graph using matplotlib"""
     ChargeInfo = GetBatteryData(BatteryChargeFile)
@@ -169,6 +189,9 @@ def DoIt():
 
     if args.Output == 'console' and args.PmSuspendFile:
         PrintConsole(args.PmSuspendFile)
+
+    if args.Output == 'graph' and args.PmSuspendFile:
+        DrawGraph(args.PmSuspendFile)
 
     if args.Battery:
         try:
