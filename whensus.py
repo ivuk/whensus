@@ -187,10 +187,10 @@ def DoIt():
         global DateFieldLength
         DateFieldLength = args.DateFieldLength
 
-    if args.Output == 'console' and args.PmSuspendFile:
+    if args.Output == 'console' and args.PmSuspendFile and not args.Battery:
         PrintConsole(args.PmSuspendFile)
 
-    if args.Output == 'graph' and args.PmSuspendFile:
+    if args.Output == 'graph' and args.PmSuspendFile and not args.Battery:
         DrawGraph(args.PmSuspendFile)
 
     if args.Battery:
