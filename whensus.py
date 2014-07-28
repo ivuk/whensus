@@ -148,6 +148,38 @@ def DrawBatteryGraph(BatteryChargeFile):
     pyplot.show()
 
 
+def DrawAllGraphs(BatteryChargeFile, PmSuspendFile):
+    """Draw both the battery charge and the suspend graph"""
+    ChargeInfo = GetBatteryData(BatteryChargeFile)
+    Time = list()
+    Battery = list()
+
+    for elem in ChargeInfo:
+        Time.append(datetime.strptime(elem[0], '%d.%m.%Y %H:%M:%S'))
+        Battery.append(elem[1])
+
+    pyplot.subplot(2, 1, 1)
+    pyplot.plot(Time, Battery)
+
+    SuspendDuration, SuspendTime, ResumeTime = GetDuration(PmSuspendFile)
+    NewDuration = list()
+    NewSuspendTime = list()
+
+    for (elema, elemb, elemc) in zip(SuspendDuration, SuspendTime, ResumeTime):
+        """y is NewDuration, x is NewSuspendTime
+        insert the values for y twice in a row in order to get the same data
+        points for suspend and resume x point
+        """
+        NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
+        NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
+        NewSuspendTime.append(datetime.strptime(elemb, '%d.%m.%Y %H:%M:%S'))
+        NewSuspendTime.append(datetime.strptime(elemc, '%d.%m.%Y %H:%M:%S'))
+
+    pyplot.subplot(2, 1, 2)
+    pyplot.plot(NewSuspendTime, NewDuration)
+    pyplot.show()
+
+
 def DoIt():
     """
     Set up the available program options
@@ -156,6 +188,8 @@ def DoIt():
     """
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('-a', '--all', dest='All', help='Draw both the '
+                        'battery and suspend graph', action='store_true')
     parser.add_argument('-b', '--battery', dest='Battery', help='Show the '
                         'battery charging/discharging information',
                         action='store_true')
@@ -203,6 +237,10 @@ def DoIt():
                 PrintBatteryConsole(BatteryInfoFile[0])
             elif args.Output == 'graph':
                 DrawBatteryGraph(BatteryInfoFile[0])
+
+    if args.All and args.PmSuspendFile:
+        BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
+        DrawAllGraphs(BatteryInfoFile[0], args.PmSuspendFile)
 
 
 if __name__ == "__main__":
