@@ -153,9 +153,11 @@ def DrawAllGraphs(BatteryChargeFile, PmSuspendFile):
     ChargeInfo = GetBatteryData(BatteryChargeFile)
     Time = list()
     Battery = list()
+    TimeCompare = list()
 
     for elem in ChargeInfo:
         Time.append(datetime.strptime(elem[0], '%d.%m.%Y %H:%M:%S'))
+        TimeCompare.append(datetime.strptime(elem[0][:10], '%d.%m.%Y'))
         Battery.append(elem[1])
 
     pyplot.subplot(2, 1, 1)
@@ -165,15 +167,20 @@ def DrawAllGraphs(BatteryChargeFile, PmSuspendFile):
     NewDuration = list()
     NewSuspendTime = list()
 
-    for (elema, elemb, elemc) in zip(SuspendDuration, SuspendTime, ResumeTime):
-        """y is NewDuration, x is NewSuspendTime
-        insert the values for y twice in a row in order to get the same data
-        points for suspend and resume x point
-        """
-        NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
-        NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
-        NewSuspendTime.append(datetime.strptime(elemb, '%d.%m.%Y %H:%M:%S'))
-        NewSuspendTime.append(datetime.strptime(elemc, '%d.%m.%Y %H:%M:%S'))
+    for index, (elema, elemb, elemc) in enumerate(zip(SuspendDuration,
+                                                  SuspendTime, ResumeTime)):
+
+        vala = datetime.strptime(elemb[:10], '%d.%m.%Y')
+        valb = datetime.strptime(elemc[:10], '%d.%m.%Y')
+
+        if vala in TimeCompare:
+            NewSuspendTime.append(datetime.strptime(elemb,
+                                                    '%d.%m.%Y %H:%M:%S'))
+            NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
+        if valb in TimeCompare:
+            NewSuspendTime.append(datetime.strptime(elemc,
+                                                    '%d.%m.%Y %H:%M:%S'))
+            NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
 
     pyplot.subplot(2, 1, 2)
     pyplot.plot(NewSuspendTime, NewDuration)
