@@ -229,26 +229,30 @@ def DoIt():
         global DateFieldLength
         DateFieldLength = args.DateFieldLength
 
-    if args.Output == 'console' and args.PmSuspendFile and not args.Battery:
-        PrintConsole(args.PmSuspendFile)
-
-    if args.Output == 'graph' and args.PmSuspendFile and not args.Battery:
-        DrawGraph(args.PmSuspendFile)
-
-    if args.Battery:
-        try:
+    if args.All:
+        if args.Output == 'graph':
             BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
-        except IOError as e:
-            print("Got IOError, '{0}: {1}'".format(e.errno, e.strerror))
+            DrawAllGraphs(BatteryInfoFile[0], args.PmSuspendFile)
+        elif args.Output == 'console':
+            BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
+            PrintConsole(args.PmSuspendFile)
+            PrintBatteryConsole(BatteryInfoFile[0])
+    else:
+        if args.Battery:
+            try:
+                BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
+            except IOError as e:
+                print("Got IOError, '{0}: {1}'".format(e.errno, e.strerror))
+            else:
+                if args.Output == 'console':
+                    PrintBatteryConsole(BatteryInfoFile[0])
+                elif args.Output == 'graph':
+                    DrawBatteryGraph(BatteryInfoFile[0])
         else:
             if args.Output == 'console':
-                PrintBatteryConsole(BatteryInfoFile[0])
+                PrintConsole(args.PmSuspendFile)
             elif args.Output == 'graph':
-                DrawBatteryGraph(BatteryInfoFile[0])
-
-    if args.All and args.PmSuspendFile:
-        BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
-        DrawAllGraphs(BatteryInfoFile[0], args.PmSuspendFile)
+                DrawGraph(args.PmSuspendFile)
 
 
 if __name__ == "__main__":
