@@ -177,6 +177,7 @@ def DrawAllGraphs(BatteryChargeFile, PmSuspendFile):
             NewSuspendTime.append(datetime.strptime(elemb,
                                                     '%d.%m.%Y %H:%M:%S'))
             NewDuration.append(datetime.strptime(str(elema), '%H:%M:%S'))
+
         if valb in TimeCompare:
             NewSuspendTime.append(datetime.strptime(elemc,
                                                     '%d.%m.%Y %H:%M:%S'))
