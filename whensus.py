@@ -238,15 +238,11 @@ def DoIt():
             PrintBatteryConsole(BatteryInfoFile[0])
     else:
         if args.Battery:
-            try:
-                BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
-            except IOError as e:
-                print("Got IOError, '{0}: {1}'".format(e.errno, e.strerror))
-            else:
-                if args.Output == 'console':
-                    PrintBatteryConsole(BatteryInfoFile[0])
-                elif args.Output == 'graph':
-                    DrawBatteryGraph(BatteryInfoFile[0])
+            BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
+            if args.Output == 'console':
+                PrintBatteryConsole(BatteryInfoFile[0])
+            elif args.Output == 'graph':
+                DrawBatteryGraph(BatteryInfoFile[0])
         else:
             if args.Output == 'console':
                 PrintConsole(args.PmSuspendFile)
