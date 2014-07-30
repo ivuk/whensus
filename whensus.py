@@ -230,11 +230,10 @@ def DoIt():
         DateFieldLength = args.DateFieldLength
 
     if args.All:
+        BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
         if args.Output == 'graph':
-            BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
             DrawAllGraphs(BatteryInfoFile[0], args.PmSuspendFile)
         elif args.Output == 'console':
-            BatteryInfoFile = glob('/var/lib/upower/history-charge-*.dat')
             PrintConsole(args.PmSuspendFile)
             PrintBatteryConsole(BatteryInfoFile[0])
     else:
