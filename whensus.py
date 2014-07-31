@@ -131,6 +131,9 @@ def DrawGraph(PmSuspendFile):
         NewSuspendTime.append(datetime.strptime(elemc, '%d.%m.%Y %H:%M:%S'))
 
     pyplot.plot(NewSuspendTime, NewDuration)
+    pyplot.xlabel('Date/time')
+    pyplot.ylabel('Duration')
+    pyplot.title('Suspend graph')
     pyplot.show()
 
 
