@@ -148,6 +148,9 @@ def DrawBatteryGraph(BatteryChargeFile):
         Battery.append(elem[1])
 
     pyplot.plot(Time, Battery)
+    pyplot.xlabel('Date/time')
+    pyplot.ylabel('Percentage')
+    pyplot.title('Battery graph')
     pyplot.show()
 
 
