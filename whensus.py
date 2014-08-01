@@ -159,11 +159,11 @@ def DrawAllGraphs(BatteryChargeFile, PmSuspendFile):
     ChargeInfo = GetBatteryData(BatteryChargeFile)
     Time = list()
     Battery = list()
-    TimeCompare = list()
+    TimeCompare = set()
 
     for elem in ChargeInfo:
         Time.append(datetime.strptime(elem[0], '%d.%m.%Y %H:%M:%S'))
-        TimeCompare.append(datetime.strptime(elem[0][:10], '%d.%m.%Y'))
+        TimeCompare.add(datetime.strptime(elem[0][:10], '%d.%m.%Y'))
         Battery.append(elem[1])
 
     pyplot.subplot(2, 1, 1)
