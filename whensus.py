@@ -167,7 +167,7 @@ def DrawAllGraphs(BatteryChargeFile, PmSuspendFile):
         Battery.append(elem[1])
 
     pyplot.subplot(2, 1, 1)
-    pyplot.plot(Time, Battery)
+    pyplot.plot(Time, Battery, marker='x', linestyle='--', color='r')
 
     SuspendDuration, SuspendTime, ResumeTime = GetDuration(PmSuspendFile)
     NewDuration = list()
