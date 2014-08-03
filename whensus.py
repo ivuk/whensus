@@ -4,7 +4,7 @@
 import argparse
 from datetime import timedelta, datetime
 from glob import glob
-from matplotlib import pyplot
+"""matplotlib gets imported when needed"""
 from time import strptime, mktime
 
 
@@ -116,6 +116,8 @@ def PrintConsole(PmSuspendFile):
 
 def DrawGraph(PmSuspendFile):
     """Draw a suspend graph using matplotlib"""
+    from matplotlib import pyplot
+
     SuspendDuration, SuspendTime, ResumeTime = GetDuration(PmSuspendFile)
     NewDuration = list()
     NewSuspendTime = list()
@@ -139,6 +141,8 @@ def DrawGraph(PmSuspendFile):
 
 def DrawBatteryGraph(BatteryChargeFile):
     """Draw a battery graph using matplotlib"""
+    from matplotlib import pyplot
+
     ChargeInfo = GetBatteryData(BatteryChargeFile)
     Time = list()
     Battery = list()
@@ -156,6 +160,8 @@ def DrawBatteryGraph(BatteryChargeFile):
 
 def DrawAllGraphs(BatteryChargeFile, PmSuspendFile):
     """Draw both the battery charge and the suspend graph"""
+    from matplotlib import pyplot
+
     ChargeInfo = GetBatteryData(BatteryChargeFile)
     Time = list()
     Battery = list()
