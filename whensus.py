@@ -179,8 +179,8 @@ def DrawAllGraphs(BatteryChargeFile, PmSuspendFile):
     NewDuration = list()
     NewSuspendTime = list()
 
-    for index, (elema, elemb, elemc) in enumerate(zip(SuspendDuration,
-                                                  SuspendTime, ResumeTime)):
+    for (elema, elemb, elemc) in zip(SuspendDuration, SuspendTime,
+                                     ResumeTime):
 
         vala = datetime.strptime(elemb[:10], '%d.%m.%Y')
         valb = datetime.strptime(elemc[:10], '%d.%m.%Y')
